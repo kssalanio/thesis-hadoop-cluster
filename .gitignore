@@ -2,3 +2,4 @@
 Dockerfile.*
 requirements.yml
 *.retry
+.idea
