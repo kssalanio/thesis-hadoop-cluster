@@ -15,6 +15,10 @@
       get_url:
         url: "{{download_url}}"
         dest: "{{hadoop_archive}}"
+  - name: ansible create directory example
+    file:
+      path: "{{hadoop_home_dir}}"
+      state: directory
 
     - name: Unpack archive
       #command: "tar -zxf {{hadoop_archive}} -C {{download_folder}} creates={{hadoop_home_dir}}" ## Old way to untar
