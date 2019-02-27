@@ -1,0 +1,53 @@
+---
+- name: 1.1 Update Yum.
+  yum: name=* state=latest
+
+- name: 1.2 Set SELinux to Permissive mode.
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: 1.3.1 Check if firewalld is installed
+  yum: name=firewalld state=installed
+  tags:
+   - install
+   - firewalld
+
+- name: 1.3.2 Disable firewalld
+  systemd: name=firewalld enabled=no
+  tags:
+   - install
+   - atomic
+   - firewalld
+
+- name: 1.3.3 Stop firewalld
+  systemd: name=firewalld state=stopped
+  ignore_errors: yes
+  tags:
+   - install
+   - atomic
+   - firewalld
+
+- name: 1.4 Install VIM
+  yum: name=vim state=installed
+  tags:
+   - install
+   - vim
+
+- name: 1.5 Install Nano
+  yum: name=nano state=installed
+  tags:
+   - install
+   - nano
+
+- name: 1.6 Install wget
+  yum: name=wget state=installed
+  tags:
+   - install
+   - wget
+
+- name: 1.7 Install mlocate
+  yum: name=mlocate state=installed
+  tags:
+   - install
+   - mlocate
