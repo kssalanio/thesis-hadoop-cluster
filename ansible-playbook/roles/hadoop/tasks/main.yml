@@ -27,9 +27,3 @@
    - install
    - atomic
    - firewalld
-
-- name: 1.4.1 Install Oracle Java
-  hosts: all
-  become: true
-  roles:
-    - oracle-java
