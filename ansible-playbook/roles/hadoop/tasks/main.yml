@@ -1,0 +1,14 @@
+---
+- name: 1. Update Yum.
+  yum: name=* state=latest
+
+- name: 2. Set SELinux to Permissive mode.
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: 3. Stop and disable firewalld.
+   service:
+     name: firewalld
+     state: stopped
+     enabled: False
