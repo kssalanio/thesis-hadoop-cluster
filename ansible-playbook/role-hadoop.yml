@@ -4,5 +4,5 @@
   gather_facts: yes #IMPORTANT
   remote_user: root
   roles:
-    - oracle-java
+    - avinash6784.oracle-java
     - hadoop
