@@ -3,7 +3,7 @@
 # Ansible role to install Hadoop
 
   - name: Check If hadoop is already installed or not
-    shell: "{{ hadoop_name }}/bin/hadoop -version 2>&1 | grep version | awk '{print $3}' | sed 's/\"//g'"
+    shell: "{{ hadoop_home_dir }}/bin/hadoop -version 2>&1 | grep version | awk '{print $3}' | sed 's/\"//g'"
     register: hadoop_installed
 
   - name: Installed hadoop version
@@ -17,14 +17,14 @@
         dest: "{{hadoop_archive}}"
 
     - name: Unpack archive
-      #command: "tar -zxf {{hadoop_archive}} -C {{download_folder}} creates={{hadoop_name}}" ## Old way to untar
+      #command: "tar -zxf {{hadoop_archive}} -C {{download_folder}} creates={{hadoop_home_dir}}" ## Old way to untar
       unarchive:
         src: "{{hadoop_archive}}"
         dest: "{{hadoop_home_dir}}"
         remote_src: yes
 
     - name: Fix hadoop dir ownership
-      file: state=directory path={{hadoop_name}} owner=root group=root recurse=yes
+      file: state=directory path={{hadoop_home_dir}} owner=root group=root recurse=yes
 
     - name: Set/Configure PATH in environment variables
       shell: "echo 'PATH={{hadoop_home_dir}}/bin:{{hadoop_home_dir}}/sbin:$PATH' > {{env_vars_file}}"
