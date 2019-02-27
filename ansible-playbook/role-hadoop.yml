@@ -12,4 +12,4 @@
           java_archive: "{{download_folder}}/jdk-8u201-linux-x64.tar.gz"
           #java_env_file: "/etc/profile.d/java.sh"
           java_home: /opt/jdk1.8.0_201
-    - hadoop
+    - role: hadoop
