@@ -1,29 +1,44 @@
 ---
-- name: 1.1 Update Yum.
-  yum: name=* state=latest
 
-- name: 1.2 Set SELinux to Permissive mode.
-  selinux:
-    policy: targeted
-    state: permissive
+# Ansible role to install Hadoop
 
-- name: 1.3.1 Check if firewalld is installed
-  yum: name=firewalld state=installed
-  tags:
-   - install
-   - firewalld
+  - name: Check If hadoop is already installed or not
+    shell: "{{ hadoop_name }}/bin/hadoop -version 2>&1 | grep version | awk '{print $3}' | sed 's/\"//g'"
+    register: hadoop_installed
 
-- name: 1.3.2 Disable firewalld
-  systemd: name=firewalld enabled=no
-  tags:
-   - install
-   - atomic
-   - firewalld
+  - name: Installed hadoop version
+    debug: "msg={{hadoop_installed.stdout}}"
 
-- name: 1.3.3 Stop firewalld
-  systemd: name=firewalld state=stopped
-  ignore_errors: yes
-  tags:
-   - install
-   - atomic
-   - firewalld
+  - block:
+    - name: Download Java
+      #command: "wget -q -O {{hadoop_archive}} --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' {{download_url}} creates={{hadoop_archive}}" ## Old way to download
+      get_url:
+        url: "{{download_url}}"
+        dest: "{{hadoop_archive}}"
+
+    - name: Unpack archive
+      #command: "tar -zxf {{hadoop_archive}} -C {{download_folder}} creates={{hadoop_name}}" ## Old way to untar
+      unarchive:
+        src: "{{hadoop_archive}}"
+        dest: "{{hadoop_home_dir}}"
+        remote_src: yes
+
+    - name: Fix hadoop dir ownership
+      file: state=directory path={{hadoop_name}} owner=root group=root recurse=yes
+
+    - name: Set/Configure PATH in environment variables
+      shell: "echo 'PATH={{hadoop_home_dir}}/bin:{{hadoop_home_dir}}/sbin:$PATH' > {{env_vars_file}}"
+
+    - name: Set/Configure PATH in environment variables
+      shell: "echo 'PATH={{hadoop_home_dir}}/bin:{{hadoop_home_dir}}/sbin:$PATH' > {{env_vars_file}}"
+
+    - name: Set/Configure HADOOP_CONF_DIR in environment variables
+      shell: "echo 'export HADOOP_CONF_DIR={{hadoop_home_dir}}/etc/hadoop' > {{env_vars_file}}"
+
+    - name: Set/Configure LD_LIBRARY_PATH in environment variables
+      shell: "echo 'export LD_LIBRARY_PATH={{hadoop_home_dir}}/lib/native:$LD_LIBRARY_PATH' > {{env_vars_file}}"
+
+    - name: Clean up
+      file: state=absent path={{hadoop_archive}}
+
+    when: hadoop_installed.stdout == ""
