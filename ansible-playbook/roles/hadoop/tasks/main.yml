@@ -27,7 +27,7 @@
       stat: path="{{hadoop_tld}}{{hadoop_version}}"
       register: hadoop_dir_stat
 
-    - name: "Rename hadoop dir from [{{hadoop_tld}}{{hadoop_version}}] to [{{hadoop_home_dir}}]"
+    - name: "Rename hadoop dir from [{{hadoop_tld}}hadoop-{{hadoop_version}}] to [{{hadoop_home_dir}}]"
       command: "mv {{hadoop_tld}}hadoop-{{hadoop_version}} {{hadoop_home_dir}}"
       when: hadoop_dir_stat.stat.exists
 
