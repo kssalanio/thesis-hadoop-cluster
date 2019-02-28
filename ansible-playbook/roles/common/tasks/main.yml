@@ -74,5 +74,5 @@
   lineinfile:
     dest: "{{ssh_user_folder}}authorized_keys"
     state: present
-    line: "{{hostvars[item]['ssh_keys']['stdout']}}"
+    line: "{{hostvars[item]['ssh_pub_keys']['stdout']}}"
   with_items: "{{groups['all']}}"
