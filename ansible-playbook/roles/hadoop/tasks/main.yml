@@ -24,7 +24,7 @@
         remote_src: yes
 
     - name: Stat hadoop dir
-      stat: path="{{hadoop_tld}}{{hadoop_version}}"
+      stat: path="{{hadoop_tld}}hadoop-{{hadoop_version}}"
       register: hadoop_dir_stat
 
     - name: "Rename hadoop dir from [{{hadoop_tld}}hadoop-{{hadoop_version}}] to [{{hadoop_home_dir}}]"
