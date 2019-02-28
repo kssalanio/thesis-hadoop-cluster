@@ -59,8 +59,7 @@
    - unzip
 
 - name: Check if SSH keys are present
-    stat:
-      path: "{{ssh_priv_key_file}}"
+    stat: path="{{ssh_priv_key_file}}"
     register: ssh_pub_key
 
 - name: Generate SSH keys
@@ -77,4 +76,3 @@
     state: present
     line: "{{hostvars[item]['ssh_keys']['stdout']}}"
   with_items: "{{groups['all']}}"
-  
