@@ -59,8 +59,8 @@
    - unzip
 
 - name: Check if SSH keys are present
-    stat: path="{{ssh_priv_key_file}}"
-    register: ssh_pub_key
+  stat: path="{{ssh_priv_key_file}}"
+  register: ssh_pub_key
 
 - name: Generate SSH keys
   shell: "ssh-keygen -q -t rsa -f {{ssh_priv_key_file}} -N ''"
