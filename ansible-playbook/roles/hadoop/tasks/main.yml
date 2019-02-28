@@ -34,17 +34,26 @@
     - name: Fix hadoop dir ownership
       file: state=directory path={{hadoop_home_dir}} owner=root group=root recurse=yes
 
-    - name: Set/Configure PATH in environment variables
-      shell: "echo 'PATH={{hadoop_home_dir}}bin:{{hadoop_home_dir}}sbin:$PATH' > {{hadoop_env_vars_file}}"
+    - name: Backup old [{{hadoop_env_vars_file}}]
+      shell: "cp {{hadoop_env_vars_file}} {{hadoop_env_vars_file}}.bak"
 
     - name: Set/Configure PATH in environment variables
-      shell: "echo 'PATH={{hadoop_home_dir}}bin:{{hadoop_home_dir}}sbin:$PATH' >> {{hadoop_env_vars_file}}"
+      #shell: "echo 'PATH={{hadoop_home_dir}}bin:{{hadoop_home_dir}}sbin:$PATH' > {{hadoop_env_vars_file}}"
+      lineinfile:
+        path: "{{hadoop_env_vars_file}}"
+        line: "PATH={{hadoop_home_dir}}bin:{{hadoop_home_dir}}sbin:$PATH"
 
     - name: Set/Configure HADOOP_CONF_DIR in environment variables
-      shell: "echo 'export HADOOP_CONF_DIR={{hadoop_home_dir}}etc/hadoop' >> {{hadoop_env_vars_file}}"
+      #shell: "echo 'export HADOOP_CONF_DIR={{hadoop_home_dir}}etc/hadoop' >> {{hadoop_env_vars_file}}"
+      lineinfile:
+        path: "{{hadoop_env_vars_file}}"
+        line: "export HADOOP_CONF_DIR={{hadoop_home_dir}}etc/hadoop"
 
     - name: Set/Configure LD_LIBRARY_PATH in environment variables
-      shell: "echo 'export LD_LIBRARY_PATH={{hadoop_home_dir}}lib/native:$LD_LIBRARY_PATH' >> {{hadoop_env_vars_file}}"
+      #shell: "echo 'export LD_LIBRARY_PATH={{hadoop_home_dir}}lib/native:$LD_LIBRARY_PATH' >> {{hadoop_env_vars_file}}"
+      lineinfile:
+        path: "{{hadoop_env_vars_file}}"
+        line: "export LD_LIBRARY_PATH={{hadoop_home_dir}}lib/native:$LD_LIBRARY_PATH"
 
 #    - name: Clean up
 #      file: state=absent path={{hadoop_archive}}

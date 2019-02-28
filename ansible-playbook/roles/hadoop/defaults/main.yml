@@ -5,4 +5,4 @@ hadoop_download_url: https://www-us.apache.org/dist/hadoop/common/hadoop-{{hadoo
 hadoop_tld: /opt/
 hadoop_home_dir: "/opt/hadoop/"
 hadoop_archive: "/opt/hadoop-{{hadoop_version}}.tar.gz"
-hadoop_env_vars_file: "/root/.profile"
+hadoop_env_vars_file: "/root/.bash_profile"
