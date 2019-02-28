@@ -51,3 +51,9 @@
   tags:
    - install
    - mlocate
+
+- name: 1.8 Install unzip
+  yum: name=mlocate state=installed
+  tags:
+   - install
+   - unzip

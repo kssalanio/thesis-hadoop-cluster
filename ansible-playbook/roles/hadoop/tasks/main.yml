@@ -10,13 +10,13 @@
     debug: "msg={{hadoop_installed.stdout}}"
 
   - block:
-    - name: Download Java
+    - name: "Download Hadoop from {{hadoop_download_url}}"
       #command: "wget -q -O {{hadoop_archive}} --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' {{download_url}} creates={{hadoop_archive}}" ## Old way to download
       get_url:
         url: "{{hadoop_download_url}}"
         dest: "{{hadoop_archive}}"
 
-    - name: ansible create directory example
+    - name: Create Hadoop Directory
       file:
         path: "{{hadoop_home_dir}}"
         state: directory
