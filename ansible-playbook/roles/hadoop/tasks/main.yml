@@ -16,17 +16,20 @@
         url: "{{hadoop_download_url}}"
         dest: "{{hadoop_archive}}"
 
-    - name: Create Hadoop Directory
-      file:
-        path: "{{hadoop_home_dir}}"
-        state: directory
-
     - name: Unpack archive
       #command: "tar -zxf {{hadoop_archive}} -C {{download_folder}} creates={{hadoop_home_dir}}" ## Old way to untar
       unarchive:
         src: "{{hadoop_archive}}"
-        dest: "{{hadoop_home_dir}}"
+        dest: "{{hadoop_tld}}"
         remote_src: yes
+
+    - name: Stat hadoop dir
+      stat: path="{{hadoop_tld}}{{hadoop_version}}"
+      register: hadoop_dir_stat
+
+    - name: "Rename hadoop dir from [{{hadoop_tld}}{{hadoop_version}}] to [{{hadoop_home_dir}}]"
+      command: "mv {{hadoop_tld}}{{hadoop_version}} {{hadoop_home_dir}}"
+      when: hadoop_dir_stat.stat.exists
 
     - name: Fix hadoop dir ownership
       file: state=directory path={{hadoop_home_dir}} owner=root group=root recurse=yes
@@ -35,13 +38,13 @@
       shell: "echo 'PATH={{hadoop_home_dir}}/bin:{{hadoop_home_dir}}/sbin:$PATH' > {{hadoop_env_vars_file}}"
 
     - name: Set/Configure PATH in environment variables
-      shell: "echo 'PATH={{hadoop_home_dir}}/bin:{{hadoop_home_dir}}/sbin:$PATH' > {{hadoop_env_vars_file}}"
+      shell: "echo 'PATH={{hadoop_home_dir}}/bin:{{hadoop_home_dir}}/sbin:$PATH' >> {{hadoop_env_vars_file}}"
 
     - name: Set/Configure HADOOP_CONF_DIR in environment variables
-      shell: "echo 'export HADOOP_CONF_DIR={{hadoop_home_dir}}/etc/hadoop' > {{hadoop_env_vars_file}}"
+      shell: "echo 'export HADOOP_CONF_DIR={{hadoop_home_dir}}/etc/hadoop' >> {{hadoop_env_vars_file}}"
 
     - name: Set/Configure LD_LIBRARY_PATH in environment variables
-      shell: "echo 'export LD_LIBRARY_PATH={{hadoop_home_dir}}/lib/native:$LD_LIBRARY_PATH' > {{hadoop_env_vars_file}}"
+      shell: "echo 'export LD_LIBRARY_PATH={{hadoop_home_dir}}/lib/native:$LD_LIBRARY_PATH' >> {{hadoop_env_vars_file}}"
 
     - name: Clean up
       file: state=absent path={{hadoop_archive}}
