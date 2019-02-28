@@ -35,10 +35,10 @@
       file: state=directory path={{hadoop_home_dir}} owner=root group=root recurse=yes
 
     - name: Set/Configure PATH in environment variables
-      shell: "echo 'PATH={{hadoop_home_dir}}/bin:{{hadoop_home_dir}}sbin:$PATH' > {{hadoop_env_vars_file}}"
+      shell: "echo 'PATH={{hadoop_home_dir}}bin:{{hadoop_home_dir}}sbin:$PATH' > {{hadoop_env_vars_file}}"
 
     - name: Set/Configure PATH in environment variables
-      shell: "echo 'PATH={{hadoop_home_dir}}/bin:{{hadoop_home_dir}}sbin:$PATH' >> {{hadoop_env_vars_file}}"
+      shell: "echo 'PATH={{hadoop_home_dir}}bin:{{hadoop_home_dir}}sbin:$PATH' >> {{hadoop_env_vars_file}}"
 
     - name: Set/Configure HADOOP_CONF_DIR in environment variables
       shell: "echo 'export HADOOP_CONF_DIR={{hadoop_home_dir}}etc/hadoop' >> {{hadoop_env_vars_file}}"
