@@ -57,3 +57,24 @@
   tags:
    - install
    - unzip
+
+- name: Check if SSH keys are present
+    stat:
+      path: "{{ssh_priv_key_file}}"
+    register: ssh_pub_key
+
+- name: Generate SSH keys
+  shell: "ssh-keygen -q -t rsa -f {{ssh_priv_key_file}} -N ''"
+  when: not ssh_pub_key.stat.exists
+
+- name: Store SSH pub keys
+  shell: "/bin/cat {{ssh_priv_key_file}}.pub"
+  register: ssh_pub_keys
+
+- name: Copy pub keys to every other host
+  lineinfile:
+    dest: "{{ssh_user_folder}}authorized_keys"
+    state: present
+    line: "{{hostvars[item]['ssh_keys']['stdout']}}"
+  with_items: "{{groups['all']}}"
+  
