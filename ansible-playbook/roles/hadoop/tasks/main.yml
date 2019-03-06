@@ -56,24 +56,24 @@
         line: "export LD_LIBRARY_PATH={{hadoop_home_dir}}lib/native:$LD_LIBRARY_PATH"
 
     - name: Configure namenode in core-site.xml
-        blockinfile:
-          dest: "{{hadoop_home_dir}}etc/hadoop/core-site.xml"
-          block: |
-            <property>
-                <name>fs.default.name</name>
-                <value>hdfs://node-00.spark:9000</value>
-            </property>
-          backup: yes
+      blockinfile:
+        dest: "{{hadoop_home_dir}}etc/hadoop/core-site.xml"
+        block: |
+          <property>
+              <name>fs.default.name</name>
+              <value>hdfs://node-00.spark:9000</value>
+          </property>
+        backup: yes
 
     - name: Configure namenode in core-site.xml
-        blockinfile:
-          dest: "{{hadoop_home_dir}}etc/hadoop/core-site.xml"
-          block: |
-            <property>
-                <name>fs.default.name</name>
-                <value>hdfs://node-00.spark:9000</value>
-            </property>
-          backup: yes
+      blockinfile:
+        dest: "{{hadoop_home_dir}}etc/hadoop/core-site.xml"
+        block: |
+          <property>
+              <name>fs.default.name</name>
+              <value>hdfs://node-00.spark:9000</value>
+          </property>
+        backup: yes
 
 #    - name: Clean up
 #      file: state=absent path={{hadoop_archive}}
