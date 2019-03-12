@@ -20,22 +20,22 @@
     <!-- YARN as job scheduler -->
     <property>
         <name>mapreduce.framework.name</name>
-        <value>yarn</value>
+        <value>{{hadoop_mr_framework_name}}</value>
     </property>
 
     <!-- Memory Allocation Config -->
     <property>
         <name>yarn.app.mapreduce.am.resource.mb</name>
-        <value>{{}}</value>
+        <value>{{hadoop_yarn_app_mr_am_resource_mb}}</value>
     </property>
 
     <property>
         <name>mapreduce.map.memory.mb</name>
-        <value>{{}}</value>
+        <value>{{hadoop_mr_map_memory_mb}}</value>
     </property>
 
     <property>
         <name>mapreduce.reduce.memory.mb</name>
-        <value>{{}}</value>
+        <value>{{hadoop_mr_reduce_memory_mb}}</value>
     </property>
 </configuration>

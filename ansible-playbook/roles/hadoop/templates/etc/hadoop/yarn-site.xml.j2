@@ -36,22 +36,22 @@
     <!-- Memory Allocation Config -->
     <property>
         <name>yarn.nodemanager.resource.memory-mb</name>
-        <value>{{}}</value>
+        <value>{{hadoop_yarn_nodemanager_resource_memory_mb}}</value>
     </property>
 
     <property>
         <name>yarn.scheduler.maximum-allocation-mb</name>
-        <value>{{}}</value>
+        <value>{{hadoop_yarn_scheduler_maximum_allocation_mb}}</value>
     </property>
 
     <property>
         <name>yarn.scheduler.minimum-allocation-mb</name>
-        <value>{{}}</value>
+        <value>{{hadoop_yarn_scheduler_minimum_allocation_mb}}</value>
     </property>
 
     <property>
         <name>yarn.nodemanager.vmem-check-enabled</name>
-        <value>{{}}</value>
+        <value>{{hadoop_yarn_nodemanager_vmem_check_enabled}}</value>
     </property>
 
 </configuration>
