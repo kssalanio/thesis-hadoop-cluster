@@ -9,7 +9,8 @@
   - name: Installed hadoop version
     debug: "msg={{hadoop_installed.stdout}}"
 
-  - block:
+  - name: Download and Untar/Install
+    block:
     - name: "Download Hadoop from {{hadoop_download_url}}"
       #command: "wget -q -O {{hadoop_archive}} --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' {{download_url}} creates={{hadoop_archive}}" ## Old way to download
       get_url:
@@ -34,6 +35,14 @@
     - name: Fix hadoop dir ownership
       file: state=directory path={{hadoop_home_dir}} owner=root group=root recurse=yes
 
+    when: hadoop_installed.stdout == ""
+
+#  - block: Clean up actions
+#    - name: Delete compressed file
+#      file: state=absent path={{hadoop_archive}}
+
+  - name: Configure Hadoop env vars
+    block:
     - name: Backup old [{{hadoop_env_vars_file}}]
       shell: "cp {{hadoop_env_vars_file}} {{hadoop_env_vars_file}}.bak"
 
@@ -55,27 +64,41 @@
         path: "{{hadoop_env_vars_file}}"
         line: "export LD_LIBRARY_PATH={{hadoop_home_dir}}lib/native:$LD_LIBRARY_PATH"
 
-    - name: Configure namenode in core-site.xml
-      blockinfile:
-        dest: "{{hadoop_home_dir}}etc/hadoop/core-site.xml"
-        block: |
-          <property>
-              <name>fs.default.name</name>
-              <value>hdfs://node-00.spark:9000</value>
-          </property>
-        backup: yes
+  - name: Configure Hadoop xml conf files
+    block:
 
-    - name: Configure namenode in core-site.xml
-      blockinfile:
-        dest: "{{hadoop_home_dir}}etc/hadoop/core-site.xml"
-        block: |
-          <property>
-              <name>fs.default.name</name>
-              <value>hdfs://node-00.spark:9000</value>
-          </property>
-        backup: yes
+#    - name: Configure namenode in core-site.xml
+#      blockinfile:
+#        dest: "{{hadoop_home_dir}}etc/hadoop/core-site.xml"
+#        block: |
+#          <property>
+#              <name>fs.default.name</name>
+#              <value>hdfs://node0.ken:9000</value>
+#          </property>
+#        backup: yes
 
-#    - name: Clean up
-#      file: state=absent path={{hadoop_archive}}
+    - name: Configure core-site.xml
+      template:
+        src="etc/hadoop/core-site.xml.j2"
+        dest="{{hadoop_home_dir}}etc/hadoop/core-site.xml"
 
-    when: hadoop_installed.stdout == ""
+    - name: Configure hdfs-site.xml
+      template:
+        src="etc/hadoop/hdfs-site.xml.j2"
+        dest="{{hadoop_home_dir}}etc/hadoop/hdfs-site.xml"
+
+    - name: Configure mapred-site.xml
+      template:
+        src="etc/hadoop/mapred-site.xml.j2"
+        dest="{{hadoop_home_dir}}etc/hadoop/mapred-site.xml"
+
+    - name: Configure yarn-site.xml
+      template:
+        src="etc/hadoop/yarn-site.xml.j2"
+        dest="{{hadoop_home_dir}}etc/hadoop/yarn-site.xml"
+
+    - name: Configure slaves file
+      template:
+        src="etc/hadoop/slaves.j2"
+        dest="{{hadoop_home_dir}}etc/hadoop/slaves"
+
