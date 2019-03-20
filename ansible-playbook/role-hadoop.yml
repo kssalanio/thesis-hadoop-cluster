@@ -15,3 +15,5 @@
         #java_env_file: "/etc/profile.d/java.sh"
         java_home: /opt/jdk1.8.0_201
     - role: hadoop
+      vars:
+        hadoop_dfs_replication: 2
