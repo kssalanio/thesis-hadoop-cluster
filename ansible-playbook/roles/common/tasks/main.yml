@@ -59,7 +59,7 @@
    - unzip
 
 - name: 1.8 Install unzip
-  yum: name=unzip state=installed
+  yum: name=rsync state=installed
   tags:
    - install
    - rsync
