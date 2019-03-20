@@ -58,6 +58,13 @@
    - install
    - unzip
 
+- name: 1.8 Install unzip
+  yum: name=unzip state=installed
+  tags:
+   - install
+   - rsync
+
+
 - name: Check if SSH keys are present
   stat: path="{{ssh_priv_key_file}}"
   register: ssh_pub_key
