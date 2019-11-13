@@ -1,39 +1,43 @@
 ---
 - name: 1.1 Update Apt.
-  apt: name=* state=latest
+  become: true
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 #One day
 
 - name: 1.2 Install VIM
-  apt: name=vim state=installed
+  apt: name=vim state=present
   tags:
    - install
    - vim
 
 - name: 1.3 Install Nano
-  apt: name=nano state=installed
+  apt: name=nano state=present
   tags:
    - install
    - nano
 
 - name: 1.4 Install wget
-  apt: name=wget state=installed
+  apt: name=wget state=present
   tags:
    - install
    - wget
 
 - name: 1.5 Install mlocate
-  apt: name=mlocate state=installed
+  apt: name=mlocate state=present
   tags:
    - install
    - mlocate
 
 - name: 1.6 Install unzip
-  apt: name=unzip state=installed
+  apt: name=unzip state=present
   tags:
    - install
    - unzip
 
 - name: 1.7 Install rsync
-  apt: name=rsync state=installed
+  apt: name=rsync state=present
   tags:
    - install
    - rsync
