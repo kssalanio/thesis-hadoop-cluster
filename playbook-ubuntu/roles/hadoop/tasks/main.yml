@@ -33,7 +33,7 @@
       when: hadoop_dir_stat.stat.exists
 
     - name: Fix hadoop dir ownership
-      file: state=directory path={{hadoop_home_dir}} owner=root group=root recurse=yes
+      file: state=directory path={{hadoop_home_dir}} owner={{ cluster_username }} group={{ cluster_username }} recurse=yes
 
     when: hadoop_installed.stdout == ""
 
