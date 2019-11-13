@@ -1,3 +1,3 @@
 ---
-ssh_user_folder: "/ubuntu/.ssh/"
-ssh_priv_key_file: "/ubuntu/.ssh/id_rsa"
+ssh_user_folder: "/home/ubuntu/.ssh/"
+ssh_priv_key_file: "/home/ubuntu/.ssh/id_rsa"
