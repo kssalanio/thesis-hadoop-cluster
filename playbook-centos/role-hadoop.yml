@@ -16,4 +16,4 @@
         java_home: /opt/jdk1.8.0_201
     - role: hadoop
       vars:
-        hadoop_dfs_replication: 2
+        hadoop_dfs_replication  : 2

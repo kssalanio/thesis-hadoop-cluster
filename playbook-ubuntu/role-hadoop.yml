@@ -3,11 +3,7 @@
   gather_facts: yes #IMPORTANT
   roles:
 #    - { role: common, sudo: yes }
-    - role: ansiblebit.oracle-java
-      vars:
-        oracle_java_deb_package: 'oracle-java8-installer'
-        oracle_java_debconf_package_default: 'oracle-java8-set-default'
-        oracle_java_home: "/usr/lib/jvm/java-8-oracle"
-    - role: hadoop
-      vars:
-        hadoop_dfs_replication: 2
+    - role: java
+#    - role: hadoop
+#      vars:
+#        hadoop_dfs_replication: 2

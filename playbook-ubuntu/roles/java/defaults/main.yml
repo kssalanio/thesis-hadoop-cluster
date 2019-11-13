@@ -1,0 +1,8 @@
+---
+#Role Java vars
+tar_file_src: /home/ubuntu/resources/java/jdk-8u231-linux-x64.tar.gz
+target_folder: /opt
+java_name: "{{download_folder}}/jdk-8u231"
+java_archive: "{{download_folder}}/jdk-8u231-linux-x64.tar.gz"
+java_env_file: "/etc/profile.d/java.sh"
+java_home: /opt/jdk1.8.0_151
