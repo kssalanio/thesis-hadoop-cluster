@@ -7,63 +7,109 @@
     cache_valid_time: 86400 #One day
 
 - name: 1.2 Install VIM
+  become: true
   apt: name=vim state=present
   tags:
    - install
    - vim
 
 - name: 1.3 Install Nano
+  become: true
   apt: name=nano state=present
   tags:
    - install
    - nano
 
 - name: 1.4 Install wget
+  become: true
   apt: name=wget state=present
   tags:
    - install
    - wget
 
 - name: 1.5 Install mlocate
+  become: true
   apt: name=mlocate state=present
   tags:
    - install
    - mlocate
 
 - name: 1.6 Install unzip
+  become: true
   apt: name=unzip state=present
   tags:
    - install
    - unzip
 
 - name: 1.7 Install rsync
+  become: true
   apt: name=rsync state=present
   tags:
    - install
    - rsync
 
+- name: 1.8 Install sshpass
+  become: true
+  apt: name=sshpass state=present
+  tags:
+   - install
+   - sshpass
 
-- name: Check if SSH keys are present
+- name: 1.9 Check if SSH keys are present
   stat: path="{{ssh_priv_key_file}}"
   register: ssh_pub_key
 
-- name: Generate SSH keys
+- name: 1.10 Generate SSH keys
   shell: "ssh-keygen -q -t rsa -f {{ssh_priv_key_file}} -N ''"
   when: not ssh_pub_key.stat.exists
 
-- name: Store SSH pub keys
-  shell: "/bin/cat {{ssh_priv_key_file}}.pub"
+- name: 1.11.1 For each host, scan for its ssh public key
+  shell: "ssh-keyscan {{ item }},`dig +short {{ item }}`"
+  with_items: "{{ groups['all'] }}"
+  register: ssh_known_host_results
+  ignore_errors: yes
+  tags:
+    - ssh
+
+- name: 1.11.2 Remove the public key in the '{{ ssh_known_hosts_file }}'
+  known_hosts:
+    name: "{{ item.item }}"
+    state: "absent"
+    path: "{{ ssh_known_hosts_file }}"
+  with_items: "{{ ssh_known_host_results.results }}"
+  tags:
+    - ssh
+
+- name: 1.11.3 Add/update the public key in the '{{ ssh_known_hosts_file }}'
+  known_hosts:
+    name: "{{ item.item }}"
+    key: "{{ item.stdout }}"
+    state: "present"
+    path: "{{ ssh_known_hosts_file }}"
+  with_items: "{{ ssh_known_host_results.results }}"
+  tags:
+    - ssh
+
+- name: 1.12 Store SSH pub keys
+  shell: "/bin/cat {{ssh_pub_key_file}}"
   register: ssh_pub_keys
 
-- name: Copy pub keys to every other host
-  lineinfile:
-    dest: "{{ssh_user_folder}}authorized_keys"
-    state: present
-    line: "{{hostvars[item]['ssh_pub_keys']['stdout']}}"
-  with_items: "{{groups['all']}}"
+#- name: 1.13 Copy pub keys to every other host
+#  lineinfile:
+#    dest: "{{ssh_user_folder}}authorized_keys"
+#    state: present
+#    line: "{{hostvars[item]['ssh_pub_keys']['stdout']}}"
+#  with_items: "{{ groups['all'] }}"
+
+- name: 1.13 For each host, ssh-copy-id my ssh public keys to the host
+  shell: "sshpass -p {{ ansible_ssh_pass }} ssh-copy-id {{ item }}"
+  with_items: "{{ groups['all'] }}"
+  when: not (( ansible_ssh_pass is undefined ) or ( ansible_ssh_pass is none ) or ( ansible_ssh_pass | trim == ''))
+  tags:
+    - sshcopy
 
 # tasks/etc_hosts.j2.yml
-- name: Generate /etc/etc_hosts.j2 file
+- name: 1.14 Generate /etc/etc_hosts.j2 file
   template:
     src=etc_hosts.j2
     dest=/etc/hosts

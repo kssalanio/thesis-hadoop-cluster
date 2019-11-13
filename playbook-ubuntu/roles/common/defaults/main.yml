@@ -1,3 +1,6 @@
 ---
 ssh_user_folder: "/home/ubuntu/.ssh/"
+ssh_known_hosts_file: "/home/ubuntu/.ssh/known_hosts"
 ssh_priv_key_file: "/home/ubuntu/.ssh/id_rsa"
+ssh_pub_key_file: "{{ ssh_priv_key_file }}.pub"
+ansible_ssh_pass: "admin@123321"

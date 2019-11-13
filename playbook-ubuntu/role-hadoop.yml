@@ -1,8 +1,6 @@
 ---
 - hosts: all
   gather_facts: yes #IMPORTANT
-  #remote_user: ubuntu
-  become: true
   roles:
     - { role: common, sudo: yes }
 #    - role: hadoop
