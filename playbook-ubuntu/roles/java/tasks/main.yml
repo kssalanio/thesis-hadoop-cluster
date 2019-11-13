@@ -29,8 +29,8 @@
 #        remote_src: yes
       command: tar xzf {{ java_archive }}
       args:
-        chdir: {{ target_folder }}
-        creates: {{ java_name }}
+        chdir: "{{ target_folder }}"
+        creates: "{{ java_name }}"
       become: yes
 
     - name: 1.2 Fix ownership of {{ target_folder }}
