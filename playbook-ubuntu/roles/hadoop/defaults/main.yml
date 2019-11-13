@@ -3,9 +3,9 @@
 hadoop_version: 2.8.5
 hadoop_download_url: https://www-us.apache.org/dist/hadoop/common/hadoop-{{hadoop_version}}/hadoop-{{hadoop_version}}.tar.gz
 hadoop_tld: /home/ubuntu/
-hadoop_home_dir: "/home/ubuntu/hadoop/"
-hadoop_data_dir: "/home/ubuntu/hadoop_data/"
-hadoop_archive: "/home/ubuntu/hadoop-{{hadoop_version}}.tar.gz"
+hadoop_home_dir: "{{hadoop_tld}}hadoop/"
+hadoop_data_dir: "{{hadoop_tld}}hadoop_data/"
+hadoop_archive: "{{hadoop_tld}}hadoop-{{hadoop_version}}.tar.gz"
 hadoop_env_vars_file: "/home/ubuntu/.bashrc"
 hadoop_node_fqdn_namenode: "spark00"
 hadoop_dfs_replication: 1

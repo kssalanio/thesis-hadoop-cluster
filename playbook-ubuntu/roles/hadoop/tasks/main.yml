@@ -101,6 +101,12 @@
         src="etc/hadoop/yarn-site.xml.j2"
         dest="{{hadoop_home_dir}}etc/hadoop/yarn-site.xml"
 
+    - name: Set JAVA_HOME in hadoop-env.sh
+      lineinfile:
+        dest: "{{ hadoop_home_dir }}etc/hadoop/hadoop-env.sh"
+        state: present
+        line: 'export JAVA_HOME="${JAVA_HOME}/jre"'
+
     - name: Configure slaves file
       template:
         src="etc/hadoop/slaves.j2"
