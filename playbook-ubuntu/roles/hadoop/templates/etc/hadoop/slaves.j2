@@ -1,0 +1,4 @@
+{% for item in groups["slaves"]  %}
+{% set short_name = item.split('.') %}
+{{ short_name[0] }}
+{% endfor %}
