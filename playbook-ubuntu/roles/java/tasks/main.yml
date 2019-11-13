@@ -20,10 +20,10 @@
       copy: src={{ tar_file_src }} dest={{ target_folder }}
 
     - name: Unpack archive
-      #command: "tar -zxf {{java_archive}} -C {{download_folder}} creates={{java_name}}" ## Old way to untar
+      #command: "tar -zxf {{java_archive}} -C {{target_folder}} creates={{java_name}}" ## Old way to untar
       unarchive:
         src: "{{java_archive}}"
-        dest: "{{download_folder}}"
+        dest: "{{target_folder}}"
         remote_src: yes
 
     - name: Fix ownership
