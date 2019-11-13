@@ -3,7 +3,7 @@
   gather_facts: yes #IMPORTANT
   roles:
 #    - { role: common, sudo: yes }
-    - role: java
-#    - role: hadoop
-#      vars:
-#        hadoop_dfs_replication: 2
+#    - role: java
+    - role: hadoop
+      vars:
+        hadoop_dfs_replication: 2
