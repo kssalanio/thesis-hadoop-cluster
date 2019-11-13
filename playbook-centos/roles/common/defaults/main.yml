@@ -1,3 +1,0 @@
----
-ssh_user_folder: "/root/.ssh/"
-ssh_priv_key_file: "/root/.ssh/id_rsa"

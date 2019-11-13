@@ -1,0 +1,10 @@
+---
+- hosts: all
+  sudo: yes
+  gather_facts: yes #IMPORTANT
+  remote_user: ubuntu
+  roles:
+    - role: common
+    - role: hadoop
+      vars:
+        hadoop_dfs_replication: 2

@@ -1,0 +1,65 @@
+---
+- name: 1.1 Update Apt.
+  apt: name=* state=latest
+
+- name: 1.2 Install VIM
+  apt: name=vim state=installed
+  tags:
+   - install
+   - vim
+
+- name: 1.3 Install Nano
+  apt: name=nano state=installed
+  tags:
+   - install
+   - nano
+
+- name: 1.4 Install wget
+  apt: name=wget state=installed
+  tags:
+   - install
+   - wget
+
+- name: 1.5 Install mlocate
+  apt: name=mlocate state=installed
+  tags:
+   - install
+   - mlocate
+
+- name: 1.6 Install unzip
+  apt: name=unzip state=installed
+  tags:
+   - install
+   - unzip
+
+- name: 1.7 Install rsync
+  apt: name=rsync state=installed
+  tags:
+   - install
+   - rsync
+
+
+- name: Check if SSH keys are present
+  stat: path="{{ssh_priv_key_file}}"
+  register: ssh_pub_key
+
+- name: Generate SSH keys
+  shell: "ssh-keygen -q -t rsa -f {{ssh_priv_key_file}} -N ''"
+  when: not ssh_pub_key.stat.exists
+
+- name: Store SSH pub keys
+  shell: "/bin/cat {{ssh_priv_key_file}}.pub"
+  register: ssh_pub_keys
+
+- name: Copy pub keys to every other host
+  lineinfile:
+    dest: "{{ssh_user_folder}}authorized_keys"
+    state: present
+    line: "{{hostvars[item]['ssh_pub_keys']['stdout']}}"
+  with_items: "{{groups['all']}}"
+
+# tasks/etc_hosts.j2.yml
+- name: Generate /etc/etc_hosts.j2 file
+  template:
+    src=etc_hosts.j2
+    dest=/etc/hosts
