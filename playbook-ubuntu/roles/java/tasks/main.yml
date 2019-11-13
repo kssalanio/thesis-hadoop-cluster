@@ -42,10 +42,15 @@
       become: yes
 
     - name: 1.4 Exports/Run java env file for make JAVA_HOME available globally
-      shell: "echo 'source {{java_env_file}}' >> {{ bashrc_file }}"
+      lineinfile:
+        dest: "{{ bashrc_file }}"
+        state: present
+        line: "source {{java_env_file}}"
 
     - name: 1.5 Exports/Run java env file for make JAVA_HOME available globally
       shell: "source {{ bashrc_file }}"
+      become: yes
+      become_user: "ubuntu"
 
 #    - name: Clean up
 #      file: state=absent path={{java_archive}}
