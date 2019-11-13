@@ -19,10 +19,14 @@
 
     - name: Unpack archive
       #command: "tar -zxf {{hadoop_archive}} -C {{download_folder}} creates={{hadoop_home_dir}}" ## Old way to untar
-      unarchive:
-        src: "{{hadoop_archive}}"
-        dest: "{{hadoop_tld}}"
-        remote_src: yes
+#      unarchive:
+#        src: "{{hadoop_archive}}"
+#        dest: "{{hadoop_tld}}"
+#        remote_src: yes
+      command: tar xzf {{ hadoop_archive }}
+      args:
+        chdir: "{{ hadoop_tld }}"
+        creates: "{{ hadoop_home_dir }}"
 
     - name: Stat hadoop dir
       stat: path="{{hadoop_tld}}hadoop-{{hadoop_version}}"
