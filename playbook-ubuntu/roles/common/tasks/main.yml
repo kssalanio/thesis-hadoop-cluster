@@ -48,22 +48,29 @@
    - install
    - rsync
 
-- name: 1.8 Install sshpass
+- name: 1.8 Install tree
+  become: true
+  apt: name=tree state=present
+  tags:
+   - install
+   - tree
+
+- name: 1.9 Install sshpass
   become: true
   apt: name=sshpass state=present
   tags:
    - install
    - sshpass
 
-- name: 1.9 Check if SSH keys are present
+- name: 1.10 Check if SSH keys are present
   stat: path="{{ssh_priv_key_file}}"
   register: ssh_pub_key
 
-- name: 1.10 Generate SSH keys
+- name: 1.11.1 Generate SSH keys
   shell: "ssh-keygen -q -t rsa -f {{ssh_priv_key_file}} -N ''"
   when: not ssh_pub_key.stat.exists
 
-- name: 1.11.1 For each host, scan for its ssh public key
+- name: 1.11.2 For each host, scan for its ssh public key
   shell: "ssh-keyscan {{ item }},`dig +short {{ item }}`"
   with_items: "{{ groups['all'] }}"
   register: ssh_known_host_results
@@ -71,7 +78,7 @@
   tags:
     - ssh
 
-- name: 1.11.2 Remove the public key in the '{{ ssh_known_hosts_file }}'
+- name: 1.11.3 Remove the public key in the '{{ ssh_known_hosts_file }}'
   known_hosts:
     name: "{{ item.item }}"
     state: "absent"
@@ -80,7 +87,7 @@
   tags:
     - ssh
 
-- name: 1.11.3 Add/update the public key in the '{{ ssh_known_hosts_file }}'
+- name: 1.11.4 Add/update the public key in the '{{ ssh_known_hosts_file }}'
   known_hosts:
     name: "{{ item.item }}"
     key: "{{ item.stdout }}"
