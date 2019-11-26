@@ -113,8 +113,8 @@
         dest="{{hadoop_home_dir}}etc/hadoop/slaves"
 
     - name: Format HDFS on Master Node
-        shell: "hdfs namenode -format"
-        delegate_to: $item
-        with_items: ${groups.master}
-        #when: {{ format_hdfs }} == "true"
-        tags: [ 'never' ]
+      shell: "hdfs namenode -format"
+      delegate_to: $item
+      with_items: ${groups.master}
+      #when: {{ format_hdfs }} == "true"
+      tags: [ 'never' ]
